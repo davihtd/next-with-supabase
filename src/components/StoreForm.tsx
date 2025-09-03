@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { SubmitButton } from "@/components/submit-button";
 
 export default function StoreForm({ userId }: { userId: string }) {
   const supabase = createClient();
@@ -32,32 +35,32 @@ export default function StoreForm({ userId }: { userId: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-      <input
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-lg w-full">
+      <Input
         type="text"
         placeholder="Nombre de la tienda"
         value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })}
       />
-      <input
+      <Input
         type="text"
         placeholder="Teléfono"
         value={form.phone}
         onChange={(e) => setForm({ ...form, phone: e.target.value })}
       />
-      <input
+      <Input
         type="text"
         placeholder="Sitio web"
         value={form.website}
         onChange={(e) => setForm({ ...form, website: e.target.value })}
       />
-      <input
+      <Input
         type="text"
         placeholder="Dirección"
         value={form.address}
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
-      <select
+      <Select
         value={form.zone}
         onChange={(e) => setForm({ ...form, zone: e.target.value })}
       >
@@ -66,8 +69,8 @@ export default function StoreForm({ userId }: { userId: string }) {
         <option value="Zona Alta">Zona Alta</option>
         <option value="Circuito Comercial">Circuito Comercial</option>
         <option value="Costanera">Costanera</option>
-      </select>
-      <button type="submit">Guardar tienda</button>
+      </Select>
+      <SubmitButton>Guardar tienda</SubmitButton>
     </form>
   );
 }
