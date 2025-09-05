@@ -54,7 +54,9 @@ export async function PATCH(
     // validate status only if provided
     if (typeof body.status !== 'undefined') {
       const allowed = ['approved', 'rejected', 'pending'];
-      if (!allowed.includes(body.status)) return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      if (typeof body.status !== 'string' || !allowed.includes(body.status)) {
+        return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      }
     }
 
     const supabase = await createClient();
