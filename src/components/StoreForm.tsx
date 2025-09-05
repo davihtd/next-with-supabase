@@ -14,7 +14,7 @@ export default function StoreForm({ userId }: { userId: string }) {
     phone: "",
     website: "",
     address: "",
-    zone: "",
+  zona: "",
   });
 
   async function handleSubmit(e: React.FormEvent) {
@@ -60,10 +60,7 @@ export default function StoreForm({ userId }: { userId: string }) {
         value={form.address}
         onChange={(e) => setForm({ ...form, address: e.target.value })}
       />
-      <Select
-        value={form.zone}
-        onChange={(e) => setForm({ ...form, zone: e.target.value })}
-      >
+  <Select value={form.zona} onChange={(e) => setForm({ ...form, zona: e.target.value })}>
         <option value="">Selecciona una zona</option>
         <option value="Centro">Centro</option>
         <option value="Zona Alta">Zona Alta</option>

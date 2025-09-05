@@ -1,4 +1,6 @@
 import { Store, MapPin, Phone, Mail } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from './ui/button';
 
 export default function Footer() {
   return (
@@ -18,9 +20,9 @@ export default function Footer() {
               para fortalecer la economía de cada zona.
             </p>
             <div className="flex space-x-4">
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                Registrar mi tienda
-              </button>
+              <Link href="/sign-up">
+                <Button variant="default">Registrar mi tienda</Button>
+              </Link>
             </div>
           </div>
 

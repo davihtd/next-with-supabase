@@ -1,43 +1,43 @@
 "use client";
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import StoreCard from './StoreCard';
 import { Store } from '@/types/store';
 
-const featuredStores: Store[] = [
+const placeholderStores: Store[] = [
   {
     id: '1',
     name: 'Panadería San Miguel',
-  categories: ['Alimentación', 'Hogar'],
+    categories: ['Alimentación', 'Hogar'],
     zone: 'Centro',
     logo: 'https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg',
     website: 'https://example.com',
     description: 'Pan artesanal y productos de repostería',
     isFeatured: true,
-    rating: 4.8
+    rating: 4.8,
   },
   {
     id: '2',
     name: 'Farmacia Verde',
-  categories: ['Salud', 'Belleza'],
+    categories: ['Salud', 'Belleza'],
     zone: 'Norte',
     logo: 'https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg',
     website: 'https://example.com',
     description: 'Medicamentos y productos de cuidado personal',
     isFeatured: true,
-    rating: 4.9
+    rating: 4.9,
   },
   {
     id: '3',
     name: 'Librería El Saber',
-  categories: ['Educación', 'Moda'],
+    categories: ['Educación', 'Moda'],
     zone: 'Sur',
     logo: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg',
     website: 'https://example.com',
     description: 'Libros, material escolar y papelería',
     isFeatured: true,
-    rating: 4.7
+    rating: 4.7,
   },
   {
     id: '4',
@@ -48,7 +48,7 @@ const featuredStores: Store[] = [
     website: 'https://example.com',
     description: 'Cocina tradicional y comida casera',
     isFeatured: true,
-    rating: 4.6
+    rating: 4.6,
   },
   {
     id: '5',
@@ -59,7 +59,7 @@ const featuredStores: Store[] = [
     website: 'https://example.com',
     description: 'Equipos electrónicos y reparaciones',
     isFeatured: true,
-    rating: 4.5
+    rating: 4.5,
   },
   {
     id: '6',
@@ -70,12 +70,49 @@ const featuredStores: Store[] = [
     website: 'https://example.com',
     description: 'Ropa y accesorios de moda',
     isFeatured: true,
-    rating: 4.4
+    rating: 4.4,
   },
 ];
 
 export default function FeaturedStores() {
   const sliderRef = useRef<HTMLDivElement | null>(null);
+  const [stores, setStores] = useState<Store[]>(placeholderStores);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadApproved() {
+      try {
+        const res = await fetch('/api/store?status=approved');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!mounted || !Array.isArray(data)) return;
+
+        // Map server fields to front-end Store shape
+        const mapped: Store[] = data.map((s: any) => ({
+          id: s.id,
+          name: s.name,
+          categories: s.categories ?? [],
+          // DB stores 'zona' — map to 'zone' used by UI
+          zone: s.zona ?? s.zone ?? 'N/D',
+          logo: s.logo ?? '/placeholder.svg',
+          website: s.website ?? '',
+          description: s.description ?? '',
+          isFeatured: !!s.is_featured || !!s.isFeatured,
+          rating: s.rating ?? 0,
+        }));
+
+        if (mapped.length > 0) setStores(mapped);
+      } catch (err) {
+        // keep placeholders on error
+        console.error('Failed to load approved stores', err);
+      }
+    }
+
+    loadApproved();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const scrollByWidth = (direction: 'left' | 'right') => {
     const el = sliderRef.current;
@@ -107,7 +144,10 @@ export default function FeaturedStores() {
             className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-4 px-6"
             role="list"
           >
-            {featuredStores.slice(0, 6).map((store) => (
+            {(stores.filter((s) => s.isFeatured).slice(0, 6).length > 0
+              ? stores.filter((s) => s.isFeatured).slice(0, 6)
+              : placeholderStores.slice(0, 6)
+            ).map((store) => (
               <div key={store.id} role="listitem" className="snap-start" style={{ minWidth: '660px' }}>
                 <StoreCard store={store} />
               </div>

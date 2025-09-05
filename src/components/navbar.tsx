@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Search, Menu, X, Store, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from './ui/button';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,9 +60,9 @@ export default function Navbar() {
 
           {/* CTA Button - Desktop */}
           <div className="hidden md:flex">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-              ¿Quieres formar parte?
-            </button>
+            <Link href="/sign-up">
+              <Button variant="default" size="default">Registrarse</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -109,9 +111,11 @@ export default function Navbar() {
               </div>
 
               {/* Mobile CTA */}
-              <button className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                ¿Quieres formar parte?
-              </button>
+              <Link href="/sign-up">
+                <Button asChild className="w-full">
+                  <a>Registrarse</a>
+                </Button>
+              </Link>
             </div>
           </div>
         )}

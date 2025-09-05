@@ -14,13 +14,15 @@ type StoreInsert = {
 // METODO GET
 export async function GET(req: Request) {
   try {
-    const supabase = await createClient();
+  const supabase = await createClient();
 
     const url = new URL(req.url);
     const user_id = url.searchParams.get('user_id');
+  const status = url.searchParams.get('status');
 
     let query = supabase.from('stores').select('*');
     if (user_id) query = query.eq('user_id', user_id);
+  if (status) query = query.eq('status', status);
 
     const { data, error } = await query.order('created_at', { ascending: false });
 
@@ -34,7 +36,7 @@ export async function GET(req: Request) {
 // METODO POST
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
+  const supabase = await createClient();
 
     const body = (await req.json()) as Partial<StoreInsert>;
     if (!body || !body.name) {
@@ -48,7 +50,8 @@ export async function POST(req: Request) {
       website: body.website ?? null,
       address: body.address ?? null,
       zona: body.zona ?? null,
-      status: body.status ?? null,
+      // Por defecto guardamos como 'pending' para que el admin revise
+      status: body.status ?? 'pending',
     };
 
     const { data, error } = await supabase

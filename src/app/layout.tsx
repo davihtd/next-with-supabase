@@ -1,4 +1,5 @@
 import "./globals.css";
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 
 export const metadata = {
   title: "Next.js and Supabase Starter Kit",
@@ -14,6 +15,7 @@ export default function RootLayout({
     <html lang="es">
       <body>
         {children}
+        <FloatingHomeButton />
       </body>
     </html>
   );
