@@ -12,7 +12,7 @@ interface StoreCardProps {
 export default function StoreCard({ store }: StoreCardProps) {
   return (
     <Link
-      href={`/store/${store.id}`}
+      href={`/tienda/${store.id}`}
       className="block bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 w-full"
     >
       <div className="flex items-stretch">
